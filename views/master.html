@@ -1,0 +1,28 @@
+<html>
+
+<head>
+    <script src="https://cdn.bootcss.com/socket.io/2.1.1/socket.io.dev.js"></script>
+</head>
+
+<h1>master</h1>
+
+<a id='shareRoomLink' href="/slave?roomId=4433">一起听课</a>
+<button id='btn-operation-drag'>drag</button>
+
+<script>
+// const roomId = Math.random();
+const roomId = '123';
+const shareRoomLink = document.querySelector('#shareRoomLink');
+shareRoomLink.href = "/slave?roomId=" + roomId;
+
+
+window.socket = io.connect();	
+socket.emit('login', {userId:'1', userName:'nnnn', roomId});
+
+
+const btnDrag = document.querySelector('#btn-operation-drag');
+btnDrag.addEventListener('click', ev => socket.emit('operation', {action: {type: 'drag'}}))
+
+</script>
+
+</html>
