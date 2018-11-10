@@ -1,4 +1,4 @@
-const authorization = require("./event/authorization");
+const authorization = require("./authorization");
 
 const {
   connection,
