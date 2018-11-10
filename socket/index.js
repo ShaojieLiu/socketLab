@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const connection = require("./event/connection");
 
 module.exports = http => {
   var io = require("socket.io")(http);
@@ -17,6 +18,7 @@ module.exports = http => {
 
   io.on("connection", function(socket) {
     console.log("a user connected");
+    connection(socket);
 
     //监听新用户加入
     socket.on("login", function(obj) {
