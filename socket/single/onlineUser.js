@@ -8,8 +8,8 @@ class onlineUser {
   }
 
   add(user) {
-    !user.socketId && this._warn("socketId not found");
-    this._users[user.socketId] = user;
+    !user.id && this._warn("id not found");
+    this._users[user.id] = user;
   }
 
   del(socketId) {
@@ -20,8 +20,12 @@ class onlineUser {
     return Object.values(this._users);
   }
 
-  get(socketId) {
-    return this._users[socketId];
+  get(id) {
+    return this._users[id];
+  }
+
+  has(id) {
+    return this._users.hasOwnProperty(id);
   }
 }
 
