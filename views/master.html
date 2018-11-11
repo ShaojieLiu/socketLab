@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <script src="https://cdn.bootcss.com/socket.io/2.1.1/socket.io.dev.js"></script>
+  <script src="https://cdn.bootcss.com/socket.io/2.1.1/socket.io.dev.js"></script>
 </head>
 
 <h1>master</h1>
@@ -10,18 +10,35 @@
 <button id='btn-operation-drag'>drag</button>
 
 <script>
-// const roomId = Math.random();
-const roomId = '123';
-const shareRoomLink = document.querySelector('#shareRoomLink');
-shareRoomLink.href = "/slave?roomId=" + roomId;
+  // const roomId = Math.random();
+  const roomId = '123';
+  const shareRoomLink = document.querySelector('#shareRoomLink');
+  shareRoomLink.href = "/slave?roomId=" + roomId;
 
 
-window.socket = io.connect();	
-socket.emit('login', {userId:'1', userName:'nnnn', roomId});
+  window.socket = io.connect();
+  const login = () => {
+    socket.emit('login', {
+      userId: '1',
+      userName: 'nnnn',
+      roomId,
+      role: 'master'
+    });
+  }
 
-
-const btnDrag = document.querySelector('#btn-operation-drag');
-btnDrag.addEventListener('click', ev => socket.emit('operation', {action: {type: 'drag'}}))
+  const btnDrag = document.querySelector('#btn-operation-drag');
+  btnDrag.addEventListener('click', ev => socket.emit('operation', {
+    action: {
+      type: 'drag'
+    }
+  }))
+  socket.on('operation', op => console.log(op));
+  socket.on('login', console.log);
+  socket.on('logout', console.log);
+  socket.on('reLogin', () => {
+    console.log('reLogin');
+    login();
+  });
 
 </script>
 

@@ -6,13 +6,10 @@ module.exports = ({
   io,
   user
 }) => ctx => {
-  const roomId = user.roomId;
-  const userInRoom = onlineUser.getAll().filter(
-    user => user.roomId === roomId
-  );
-  userInRoom.forEach(user => io.to(user.id).emit("operation", ctx));
-
-  console.log(
-    roomId + "房间的" + user.userName + "做了" + ctx.action.type
-  );
+  if (user) {
+    user.operation(ctx);
+  } else {
+    console.log(`该连接为无效用户, 需要登录`);
+    socket.emit('reLogin');
+  }
 }

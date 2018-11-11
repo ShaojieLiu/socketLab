@@ -16,8 +16,12 @@ class onlineUser {
     delete this._users[socketId];
   }
 
-  getAll() {
-    return Object.values(this._users);
+  getList() {
+    return Object.values(this._users).map(user => user.getInfo());
+  }
+
+  getRoomUser(roomId) {
+    return Object.values(this._users).filter(user => user.roomId === roomId);
   }
 
   get(id) {

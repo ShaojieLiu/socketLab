@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <script src="https://cdn.bootcss.com/socket.io/2.1.1/socket.io.dev.js"></script>
+  <script src="https://cdn.bootcss.com/socket.io/2.1.1/socket.io.dev.js"></script>
 </head>
 
 <h1>slave</h1>
@@ -9,13 +9,27 @@
 <a id='shareRoomLink' href="/slave?roomId=4433">一起听课</a>
 
 <script>
-    const roomId = location.search.split('roomId=')[1];
-    const shareRoomLink = document.querySelector('#shareRoomLink');
-    shareRoomLink.href = "/slave?roomId=" + roomId;
+  const roomId = location.search.split('roomId=')[1];
+  const shareRoomLink = document.querySelector('#shareRoomLink');
+  shareRoomLink.href = "/slave?roomId=" + roomId;
 
-    const socket = io.connect();	
-    socket.emit('login', {userId:Math.random(), userName:'ssss', roomId});
-    socket.on('operation', op => console.log(op));
+  const socket = io.connect();
+  const login = () => {
+    socket.emit('login', {
+      userId: Math.random(),
+      userName: 'ssss',
+      roomId,
+      role: 'slave'
+    });
+  }
+  socket.on('operation', op => console.log(op));
+  socket.on('login', console.log);
+  socket.on('logout', console.log);
+  socket.on('reLogin', () => {
+    console.log('reLogin');
+    login();
+  });
+
 </script>
 
 </html>

@@ -1,24 +1,39 @@
 const onlineUser = require("../single/onlineUser");
+const Master = require("../role/master");
+const Slave = require("../role/slave");
 
 module.exports = ({
   socket,
   io
 }) => ctx => {
   //检查在线列表，如果不在里面就加入
+  let user;
   if (!onlineUser.has(socket.id)) {
-    onlineUser.add({
-      socketId: socket.id,
-      id: socket.id,
-      userId: ctx.userId,
-      roomId: ctx.roomId,
-      userName: ctx.userName,
-    })
+    user = createUser(socket, ctx);
+    onlineUser.add(user);
+  } else {
+    user = onlineUser.get(socket.id);
   }
 
-  //向所有客户端广播用户加入
-  io.emit("login", {
-    onlineUser: onlineUser.getAll(),
-    user: ctx
-  });
-  console.log(ctx.userName + "加入了聊天室" + ctx.roomId);
+  user.login();
 };
+
+const createUser = (socket, ctx) => {
+  const params = {
+    socketId: socket.id,
+    id: socket.id,
+    userId: ctx.userId,
+    roomId: ctx.roomId,
+    userName: ctx.userName,
+    role: ctx.role,
+  };
+  switch (ctx.role) {
+    case "master":
+      return new Master(params);
+    case "slave":
+      return new Slave(params);
+    default:
+      console.warn('should not login without role')
+      return new Slave(params);
+  }
+}
