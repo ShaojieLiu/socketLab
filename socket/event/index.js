@@ -4,6 +4,7 @@ const connection = require("./connection");
 const login = require("./login");
 const disconnect = require("./disconnect");
 const operation = require("./operation");
+const broadcast = require("./broadcast");
 
 const onlineUser = require("../single/onlineUser");
 const IO = require("../single/io");
@@ -13,6 +14,7 @@ const method = {
   login,
   disconnect,
   operation,
+  broadcast
 };
 
 const wraped = {};
@@ -25,7 +27,7 @@ _.forEach(method, (func, key) => {
       io: IO.io,
       user
     })(ctx);
-  }
-})
+  };
+});
 
 module.exports = wraped;

@@ -5,6 +5,7 @@ const {
   login,
   disconnect,
   operation,
+  broadcast
 } = require("./event");
 const IO = require("./single/io");
 
@@ -12,7 +13,7 @@ module.exports = http => {
   IO.initIO(http);
 
   // IO.io.set('authorization', authorization);
-  IO.io.on("connection", function (socket) {
+  IO.io.on("connection", function(socket) {
     console.log("a user connected");
 
     //监听新用户加入
@@ -24,5 +25,7 @@ module.exports = http => {
     socket.on("disconnect", disconnect(socket));
     //监听用户发出操作
     socket.on("operation", operation(socket));
+    //监听用户发出广播
+    socket.on("broadcast", broadcast(socket));
   });
 };

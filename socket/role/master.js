@@ -12,13 +12,17 @@ class Master extends Base {
 
     this.forEachOtherInRoom(user => user.emit("operation", ctx));
 
-    console.log(
-      roomId +
-        "房间的" +
-        this.userName +
-        "做了" +
-        ctx.actionPayload.map(item => item.type)
-    );
+    try {
+      console.log(
+        roomId +
+          "房间的" +
+          this.userName +
+          "做了" +
+          ctx.actionPayload.map(item => item.type)
+      );
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 

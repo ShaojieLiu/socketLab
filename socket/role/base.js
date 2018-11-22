@@ -1,5 +1,5 @@
-const onlineUser = require('../single/onlineUser');
-const IO = require('../single/io');
+const onlineUser = require("../single/onlineUser");
+const IO = require("../single/io");
 
 class Base {
   constructor(params) {
@@ -17,18 +17,13 @@ class Base {
 
   // 常用的辅助实例方法
   getInfo() {
-    const {
-      userId,
-      roomId,
-      userName,
-      role,
-    } = this;
+    const { userId, roomId, userName, role } = this;
     return {
       userId,
       roomId,
       userName,
-      role,
-    }
+      role
+    };
   }
 
   getIO() {
@@ -42,21 +37,35 @@ class Base {
 
   forEachOtherInRoom(func) {
     const roomId = this.roomId;
-    onlineUser.getRoomUser(roomId).filter(u => u.id !== this.id).forEach(func);
+    onlineUser
+      .getRoomUser(roomId)
+      .filter(u => u.id !== this.id)
+      .forEach(func);
   }
 
   emit(...params) {
-    return this.getIO().to(this.socketId).emit(...params);
+    return this.getIO()
+      .to(this.socketId)
+      .emit(...params);
   }
 
   // 通用的事件响应
   login() {
     //向所有房间内用户广播加入
-    this.forEachUserInRoom(user => user.emit("login", {
-      onlineUser: onlineUser.getList(),
-      user: this.getInfo(),
-    }));
+    this.forEachUserInRoom(user =>
+      user.emit("login", {
+        onlineUser: onlineUser.getList(),
+        user: this.getInfo()
+      })
+    );
     console.log(this.userName + "加入了聊天室" + this.roomId);
+  }
+
+  // 通用的事件响应
+  broadcast(ctx) {
+    //向所有房间内用户广播
+    this.forEachUserInRoom(user => user.emit("broadcast", ctx));
+    console.log(this.roomId + "房间的" + this.userName + "广播了", ctx);
   }
 
   disconnect() {
@@ -65,10 +74,12 @@ class Base {
       //将退出的用户从在线列表中删除
       onlineUser.del(id);
       //向房间中用户广播用户退出
-      this.forEachUserInRoom(user => user.emit("logout", {
-        onlineUser: onlineUser.getList(),
-        user: this.getInfo(),
-      }));
+      this.forEachUserInRoom(user =>
+        user.emit("logout", {
+          onlineUser: onlineUser.getList(),
+          user: this.getInfo()
+        })
+      );
       console.log(this.userName + "退出了聊天室" + this.roomId);
     }
   }
