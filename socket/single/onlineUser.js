@@ -1,3 +1,4 @@
+const { masterName } = require("../const");
 class onlineUser {
   constructor() {
     this._users = {};
@@ -22,6 +23,12 @@ class onlineUser {
 
   getRoomUser(roomId) {
     return Object.values(this._users).filter(user => user.roomId === roomId);
+  }
+
+  getRoomMaster(roomId) {
+    return Object.values(this._users).filter(
+      user => user.roomId === roomId && user.role === masterName
+    );
   }
 
   get(id) {

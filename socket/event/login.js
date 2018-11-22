@@ -1,11 +1,9 @@
 const onlineUser = require("../single/onlineUser");
 const Master = require("../role/master");
 const Slave = require("../role/slave");
+const { masterName } = require("../const");
 
-module.exports = ({
-  socket,
-  io
-}) => ctx => {
+module.exports = ({ socket, io }) => ctx => {
   //检查在线列表，如果不在里面就加入
   let user;
   if (!onlineUser.has(socket.id)) {
@@ -25,15 +23,15 @@ const createUser = (socket, ctx) => {
     userId: ctx.userId,
     roomId: ctx.roomId,
     userName: ctx.userName,
-    role: ctx.role,
+    role: ctx.role
   };
   switch (ctx.role) {
-    case "master":
+    case masterName:
       return new Master(params);
     case "slave":
       return new Slave(params);
     default:
-      console.warn('should not login without role')
+      console.warn("should not login without role");
       return new Slave(params);
   }
-}
+};

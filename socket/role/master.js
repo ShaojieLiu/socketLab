@@ -5,6 +5,10 @@ const _ = require("lodash");
 class Master extends Base {
   constructor() {
     super(...arguments);
+    this.operationHistory = {
+      actionType: "default",
+      actionPayload: []
+    };
   }
 
   operation(ctx) {
@@ -20,6 +24,13 @@ class Master extends Base {
           "做了" +
           ctx.actionPayload.map(item => item.type)
       );
+
+      if (ctx.actionPayload.length > 0) {
+        console.log(
+          "operationHistory length",
+          this.operationHistory.actionPayload.push(...ctx.actionPayload)
+        );
+      }
     } catch (err) {
       console.error(err);
     }

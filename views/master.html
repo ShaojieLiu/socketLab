@@ -11,7 +11,7 @@
 
 <script>
   // const roomId = Math.random();
-  const roomId = '123';
+  const roomId = '1234';
   const shareRoomLink = document.querySelector('#shareRoomLink');
   shareRoomLink.href = "/slave?roomId=" + roomId;
 
@@ -28,11 +28,14 @@
 
   const btnDrag = document.querySelector('#btn-operation-drag');
   btnDrag.addEventListener('click', ev => socket.emit('operation', {
-    actiontype: 'drag',
-    actionPayload: {
-      x: 101,
-      y: 102
-    }
+    actiontype: 'default',
+    actionPayload: [{
+      type: 'drag',
+      payload: {
+        x: 101,
+        y: 102
+      }
+    }]
   }))
 
   const socketOn = socket.on;
