@@ -16,7 +16,7 @@
   shareRoomLink.href = "/slave?roomId=" + roomId;
 
 
-  window.socket = io.connect();
+  window.socket = io.connect('http://localhost:4836');
   const login = () => {
     socket.emit('login', {
       userId: '1',
@@ -28,17 +28,23 @@
 
   const btnDrag = document.querySelector('#btn-operation-drag');
   btnDrag.addEventListener('click', ev => socket.emit('operation', {
-    action: {
-      type: 'drag'
+    actiontype: 'drag',
+    actionPayload: {
+      x: 101,
+      y: 102
     }
   }))
-  socket.on('operation', op => console.log(op));
-  socket.on('login', console.log);
-  socket.on('logout', console.log);
-  socket.on('reLogin', () => {
-    console.log('reLogin');
-    login();
+
+  const socketOn = socket.on;
+  socket.on = (eventName, cb) => socketOn.call(socket, eventName, data => {
+    console.log(eventName, data);
+    cb && cb(data);
   });
+
+  socket.on('operation');
+  socket.on('login');
+  socket.on('logout');
+  socket.on('reLogin', login);
 
 </script>
 

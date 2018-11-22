@@ -22,13 +22,17 @@
       role: 'slave'
     });
   }
-  socket.on('operation', op => console.log(op));
-  socket.on('login', console.log);
-  socket.on('logout', console.log);
-  socket.on('reLogin', () => {
-    console.log('reLogin');
-    login();
+
+  const socketOn = socket.on;
+  socket.on = (eventName, cb) => socketOn.call(socket, eventName, data => {
+    console.log(eventName, data);
+    cb && cb(data);
   });
+
+  socket.on('operation');
+  socket.on('login');
+  socket.on('logout');
+  socket.on('reLogin', login);
 
 </script>
 
