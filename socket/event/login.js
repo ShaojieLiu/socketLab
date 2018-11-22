@@ -7,6 +7,11 @@ module.exports = ({ socket, io }) => ctx => {
   //检查在线列表，如果不在里面就加入
   let user;
   if (!onlineUser.has(socket.id)) {
+    if (isDuplicateMaster(ctx)) {
+      console.log("isDuplicateMaster");
+      return;
+    }
+
     user = createUser(socket, ctx);
     onlineUser.add(user);
   } else {
@@ -14,6 +19,12 @@ module.exports = ({ socket, io }) => ctx => {
   }
 
   user.login();
+};
+
+const isDuplicateMaster = ctx => {
+  return (
+    ctx.role === masterName && onlineUser.getRoomMaster(ctx.roomId).length > 0
+  );
 };
 
 const createUser = (socket, ctx) => {

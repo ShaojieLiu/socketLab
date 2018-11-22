@@ -58,7 +58,17 @@ class Base {
         user: this.getInfo()
       })
     );
-    console.log(this.userName + "加入了聊天室" + this.roomId);
+
+    const roomId = this.roomId;
+
+    const history = onlineUser.getRoomHistory(roomId);
+    history && this.emit("operation", history);
+
+    console.log(
+      "作为" + this.role + "的" + this.userName + "加入了聊天室" + this.roomId,
+      "同步了历史数据",
+      history && history.actionPayload && history.actionPayload.length
+    );
   }
 
   // 通用的事件响应

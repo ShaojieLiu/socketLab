@@ -31,6 +31,11 @@ class onlineUser {
     );
   }
 
+  getRoomHistory(roomId) {
+    const master = this.getRoomMaster(roomId);
+    return master[0] && master[0].getHistory();
+  }
+
   get(id) {
     return this._users[id];
   }

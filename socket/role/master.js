@@ -11,6 +11,10 @@ class Master extends Base {
     };
   }
 
+  getHistory() {
+    return this.operationHistory;
+  }
+
   operation(ctx) {
     const roomId = this.roomId;
 
