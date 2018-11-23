@@ -5,6 +5,12 @@ const { masterName } = require("../const");
 
 module.exports = ({ socket, io }) => ctx => {
   //检查在线列表，如果不在里面就加入
+
+  if (!ctx) {
+    console.error("login 没有内容");
+    return;
+  }
+
   let user;
   if (!onlineUser.has(socket.id)) {
     if (isDuplicateMaster(ctx)) {
@@ -23,7 +29,9 @@ module.exports = ({ socket, io }) => ctx => {
 
 const isDuplicateMaster = ctx => {
   return (
-    ctx.role === masterName && onlineUser.getRoomMaster(ctx.roomId).length > 0
+    ctx &&
+    ctx.role === masterName &&
+    onlineUser.getRoomMaster(ctx.roomId).length > 0
   );
 };
 
